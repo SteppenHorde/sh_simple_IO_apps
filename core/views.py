@@ -11,11 +11,12 @@ from .forms import EmailForm
 
 class Main(TemplateView):
     template_name = 'core/main.html'
-
+    """
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         #return render(request, self.template_name, context=context)
         return context
+    """
 
 
 class SignUp(generic.CreateView):
