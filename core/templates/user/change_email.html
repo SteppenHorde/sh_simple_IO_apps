@@ -1,1 +1,15 @@
 <!-- templates/user/change_email.html -->
+
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Сменить электронную почту{% endblock %}
+
+{% block content %}
+  <h2>Смена электронной почты</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сменить электронную почту</button>
+  </form>
+{% endblock %}

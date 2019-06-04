@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.views import generic, View
 from django.http import HttpResponse
 from django.views.generic.base import TemplateView
+from django.views.generic.edit import FormView
 
 from .forms import EmailForm
 
@@ -36,27 +38,25 @@ class Profile(View):
         return render(request, self.template_name, context=context)
 
 
-class ChangeEmail(View):
-    email_form = EmailForm
-    initial = {'key': 'value'}
+class ChangeEmail(FormView):
+    form_class = EmailForm
     template_name = 'user/change_email.html'
 
     def get(self, request, *args, **kwargs):
+        self.user = User.objects.get(pk=request.user.pk)
+        self.initial = {'email': self.user.email}
         form = self.form_class(initial=self.initial)
         context = {
-            'user': request.user,
             'form': form,
         }
-        print(f'EMAIL_FIELD: {request.user.EMAIL_FIELD}')
-        print(f'email: {request.user.email}')
-        print(f'email_user: {request.user.email_user}')
-        print(f'get_email_field_name: {request.user.get_email_field_name}')
 
         return render(request, self.template_name, context=context)
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         if form.is_valid():
-            return HttpResponseRedirect('/success/')
+            self.user = User.objects.get(pk=request.user.pk)
+            self.user.email = self.request.POST['email']
+            self.user.save()
 
         return render(request, self.template_name, {'form': form})
