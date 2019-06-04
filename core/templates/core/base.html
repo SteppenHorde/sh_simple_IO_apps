@@ -1,0 +1,70 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}Simple I/O apps{% endblock %}</title>
+    <link rel="shortcut icon" type="image/png" href="{% static "core/img/favicon.ico" %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static "bootstrap/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "core/css/base.css" %}">
+    {% block styles %}
+      <link rel="stylesheet" type="text/css" href="{% static "core/css/main.css" %}">
+    {% endblock %}
+
+    <script type="text/javascript" src="{% static "core/js/jquery-3.3.1.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "core/js/popper.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "bootstrap/js/bootstrap.min.js" %}"></script>
+    {% block scripts %}{% endblock %}
+</head>
+<body>
+  {% block nav %}
+    <nav class="navigation navbar fixed-top navbar-expand-sm navbar-dark bg-dark">
+      <a class="navbar-brand" href="{% url "main" %}">World Views</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url "main" %}">Главная</a>
+          </li>
+          {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link">Добро пожаловать, {{ user.get_username }}!</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url "profile" %}">Профиль</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url "logout" %}?next={{request.path}}">Выход</a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url "login" %}?next={{request.path}}">Вход</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url "signup" %}?next={{request.path}}">Регистрация</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+
+
+  {% endblock %}
+
+<div class="container-fluid">
+  {% block content %}{% endblock %}
+</div>
+
+{% block footer %}
+<footer id="footer">
+  <p>Проект World Views создан исключительно в развлекательных целях.</p>
+  <small class="d-block mb-3 text-muted">&#127279 World Views, 2019.</small>
+</footer>
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!-- templates/user/profile.html -->
+
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+  {% if user.is_authenticated %}
+    <p><a href="{% url 'password_reset' %}">Сменить пароль</a></p>
+    {% if user.email %}
+      <p><a href="{% url 'change_email' %}">Установить электронную почту</a></p>
+    {% else %}
+      <p><a href="{% url 'change_email' %}">Сменить электронную почту</a></p>
+    {% endif %}
+  {% else %}
+    <p>Вы не вошли!</p>
+    <a href="{% url 'login' %}">Войти</a>
+  {% endif %}
+{% endblock %}
